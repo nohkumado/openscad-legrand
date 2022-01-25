@@ -178,7 +178,7 @@ module plexo_insert(tol = .4,h=tp, htop = tp)
             //translate([-5,(cover[2][1])/2-9.1,htop-2]) stempel(h=10, mask = false, tol=tol);
 }
 
-module stempel(h=10, tol=tol, mask = false)
+module stempel(h=10, tol=.2, mask = false)
 {
   innercube = (!mask)?[12-tol,12-tol,h]:[12+tol,12+tol,2*h];
   basecube = (!mask)?[14,14,2]:[14+tol,14+tol,2*h+2*tol];
