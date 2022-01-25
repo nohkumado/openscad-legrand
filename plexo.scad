@@ -1,30 +1,33 @@
 use <../../nohscadlib/fillet.scad>
-use <../../mechanical/hinge.scad>
 
-cover = [
+tp =3; //thickness of the base platine
+tdeck =6.8;//thickness of the cover
+htop = 3; //thickenss of the deco layer on top (min 3, otherwise the underlying structure shows through
+
+cover = cover();
+plat = [65.67,56.7, cover[1][2]-tp];
+durch = [ 3.6,3];
+lochq =[51.64,16.09];
+einschn =[50.00,33.40];
+schn = [ 2,6.20];
+// color("red")
+
+
+loecher =[lochq[0]-durch[0],lochq[1]-durch[0]];
+
+//plexo_platine(h=.4);
+//plexo_cover();
+plexo_insert(htop=3.5);
+
+//to be able to retrieve the sizes from outside the lib
+function cover() = [
   [76.70,75,8.3],//innen 
   [83.20,80,9.5], //aussen
   [60.40,50.6,5], //ausparung oben
   [45.24,45.75,10], //ausparung innen
 ];
 
-tp =3;
-tdeck =6.8;
-
-plat = [65.67,56.7, cover[1][2]-tp];
-durch = [ 3.6,3];
-lochq =[51.64,16.09];
- einschn =[50.00,33.40];
-schn = [ 2,6.20];
-// color("red")
-
-loecher =[lochq[0]-durch[0],lochq[1]-durch[0]];
-
-//plexo_platine(h=.4);
-//plexo_cover();
-//plexo_insert();
-hebel_insert();
-
+//The border around the piece, making the junction with the wall
 module plexo_cover()
 {
   difference()
@@ -45,13 +48,15 @@ module plexo_cover()
   }
   translate([0,0,tp]) plexo_platine(h=tp);
 }
+//The screws that fix the outer part to the inner part
 module bohrung(obenrechts = [10,10], center = false )
 {
   x = (center)?obenrechts[0]/2:obenrechts[0]; 
   y = (center)?obenrechts[1]/2:obenrechts[1]; 
- for(n=[0:3]) 
-   translate([((n%3 == 0)? -1:1)*x,((n >1)? 1:-1)*y,0])  children();
+  for(n=[0:3]) 
+    translate([((n%3 == 0)? -1:1)*x,((n >1)? 1:-1)*y,0])  children();
 }
+//The inner part holding the switching mechanism
 module plexo_platine(h=tp)
 {
   difference()
@@ -66,8 +71,8 @@ module plexo_platine(h=tp)
       }
       difference()
       {
-	    translate([0,0,h/2]) rounded_cube(d=8, siz = [plat[0],plat[1],h]);
-	    translate([0,0,cover[3][2]/2+-.1]) rounded_cube(d=8, siz = cover[3]);
+	translate([0,0,h/2]) rounded_cube(d=8, siz = [plat[0],plat[1],h]);
+	translate([0,0,cover[3][2]/2+-.1]) rounded_cube(d=8, siz = cover[3]);
       }
     }
     union()
@@ -95,7 +100,28 @@ module plexo_platine(h=tp)
 }
 
 
-module plexo_insert(tol = .4,h=tp, name="BOETTCHER", name_off = [28,10], name_size=3)
+//The cutout for the switch to let it open and close
+module papillon(tol = 0)
+{
+  tx0 = sqrt(1.5^2+20.5^2);
+  triangle = [
+    [0,0.3+tol],
+    [tx0+tol,2+tol],
+    [tx0+tol,-3-tol],
+    [0,-3-tol],
+
+    ];
+    rotate([90,0,90])
+      linear_extrude(height=13, center = true) 
+      {
+	mirror([1,0,0])polygon(triangle);
+	polygon(triangle);
+      }
+}
+//The inner parts cover, with the visible part of the switch
+//a modeling platform to add custom switches on top of it, it has a hole for passing through 
+//something to press onto the switch
+module plexo_insert(tol = .4,h=tp, htop = tp)
 {
   //plexo_cylinder shape
   //h^2=p*q//Euklid Sehnen/Höhensatz
@@ -111,80 +137,52 @@ module plexo_insert(tol = .4,h=tp, name="BOETTCHER", name_off = [28,10], name_si
 	rounded_cube(d=8, siz = [cover[2][0]-tol,cover[2][1]-tol,cover[1][2]] );
 	plexo_platine(h=tp);
       }
-      translate([0,0,tp+1.5]) 
+      translate([0,0,cover[1][2]/4]) 
       {
 	difference()
 	{
-	  rounded_cube(d=8, siz = [cover[2][0]-tol,cover[2][1]-tol,3] );
+	  translate([0,0,htop/2]) 
+	    rounded_cube(d=8, siz = [cover[2][0]-tol,cover[2][1]-tol,htop] );
 	  union()
 	  {
-	    translate([-5,8,0]) cube([13,35,20], center = true);//cut out tampon
+	    translate([-5,0,1]) papillon(tol = 0);
+	    //Schraubloecher
 	    translate([0,0,-tp]) 
 	      bohrung(obenrechts = loecher, center = true  )
 	      {
 		translate([durch[1]-durch[0],0,0]) 
-		  cylinder(d=durch[0]+2, h=2*h,$fn=20, center = false);
-		cylinder(d=durch[0]+2, h=2*h,$fn=20, center = false);
+		  cylinder(d=durch[0]+2, h=2*(h+htop),$fn=20, center = false);
+		cylinder(d=durch[0]+2, h=2*(h+htop),$fn=20, center = false);
 	      }
 	  }
 	}
       }
     }
 
-    intersection()
-    {
-      color("red")
-	translate([0,0,-q+pr/2+tp-.1])
-	rotate([0,90,0])
-	cylinder(d=pr,h=42,center = true, $fa=.1);
-      color("blue")
-	translate([0,0,-15+tp+h])
-	cube([50,42,30], center = true);
-    }
-  }
-}
-module hebel_insert(tol = .4,h=tp, name="BOETTCHER", name_off = [28,10], name_size=3)
-{
-
-  plexo_insert(tol = tol,h=h);
-
-    //hinge base
-    translate([-15,-25,tp+3]) 
-    cube([30,8.8,2]);
-
-  translate([0,-(cover[2][1])/2+11.6,3*h+5])
-    rotate([90,0,-90])
-    translate([0,0,-15])
     union()
     {
-      hinge(outd=10,axe= 5,h=30,parts=3, tol =0.4,print="left", 
-	  plate = "bottom", opento = 0, label = "", fld=2, flb = 40, maxalpha = 60, minalpha =0 ,cutoutd = 2 ); 
-      hinge(outd=10,axe= 5,h=30,parts=3, tol =0.4,print="right", 
-	  plate = "bottom", opento = -0, label = "", fld=2, flb = 10, maxalpha = 60, minalpha =0 ,cutoutd = 2 ); 
-    }
-
-
-    //tampon 
-    translate([-9,13,0]) 
+    //untere Rundung
+    intersection()
     {
-      difference()
-      {
-	cube([8,8.8,10]);
-	color("red")
-	  translate([4,9.6,0]) rotate([0,-90,180])fillet(r=2, h=10, center = true, offs=1);
-      }
+      translate([0,0,-q+pr/2+tp-.1])
+	rotate([0,90,0])
+	cylinder(d=pr,h=42,center = true, $fa=.1);
+      translate([0,0,-15+tp+h])
+	cube([50,42,30], center = true);
     }
-    translate([-15,12.5,tp+6]) 
-    {
-      difference()
-      {
-  color("green")
-    cube([30,15,2]);
+	    //translate([-5,16.3,0]) cube([13,13,4*htop], center = true);//cut out tampon
+            translate([-5,(cover[2][1])/2-9.1,htop-2]) stempel(h=10, mask = true, tol=1);
+								       //translate([-5,8,0]) cube([13,35,20], center = true);//cut out tampon
+    }
+  }
+            //translate([-5,(cover[2][1])/2-9.1,htop-2]) stempel(h=10, mask = false, tol=tol);
+}
+
+module stempel(h=10, tol=tol, mask = false)
+{
+  innercube = (!mask)?[12-tol,12-tol,h]:[12+tol,12+tol,2*h];
+  basecube = (!mask)?[14,14,2]:[14+tol,14+tol,2*h+2*tol];
+  translate([0,0,innercube[2]/2]) cube(innercube, center = true);
   color("red")
-    translate([name_off[0],name_off[1],-1])
-    rotate([0,0,180])
-    linear_extrude(height=4)
-    text(name, size=name_size);
-      }
-    }
+  translate([-basecube[0]/2,-basecube[1]/2,(!mask)?0:-basecube[2]+2+2*tol]) cube(basecube, center = false);
 }
