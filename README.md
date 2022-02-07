@@ -16,7 +16,10 @@ You will also need my [nohscadlib](https://github.com/nohkumado/nohscadlib.git) 
 
 
 and here's what my actual doorbell looks like:
-![Doorbell photo][img/proto1\_klingelknopf.jpg]
+![Doorbell photo](img/proto1\_klingelknopf.jpg)
 
 its a prototype, i printed it with a cleareance of .4mm, which was too much... 
+if you want the hinge model yourself, drop me a message for the hinge itself
+
+have fun
 
