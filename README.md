@@ -17,8 +17,8 @@ You will also need my [nohscadlib](https://github.com/nohkumado/nohscadlib.git) 
 
 and here's what my actual doorbell looks like:
 
-- model ![model](img/hinge\_switch.png)
-- printed ![Doorbell photo](img/proto1\_klingelknopf.jpg)
+- model ![model](img/hinge\_switch.png = 50%)
+- printed ![Doorbell photo](img/proto1\_klingelknopf.jpg = 60%)
 
 its a prototype, i printed it with a cleareance of .4mm, which was too much... 
 if you want the hinge model yourself, drop me a message for the hinge itself
@@ -27,7 +27,7 @@ have fun
 
 ## available modules:
 
-- ![cover](img/plexo\_cover.png)
-- ![platine](img/plexo\_platine.png)
-- ![insert](img/plexo\_insert.png)
-- ![switch insert](img/plexo\_switch\_insert.png)
+- ![cover](img/plexo\_cover.png = 50%)
+- ![platine](img/plexo\_platine.png = 50%)
+- ![insert](img/plexo\_insert.png = 50%)
+- ![switch insert](img/plexo\_switch\_insert.png = 50%)
