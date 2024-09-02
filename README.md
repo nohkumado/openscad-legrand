@@ -30,4 +30,4 @@ have fun
 - cover:<img src="img/plexo_cover.png" alt="cover" width="50%"/>
 - platine:<img src="img/plexo_platine.png" alt="platine" width="50%"/>
 - insert:<img src="img/plexo_insert.png" alt="insert" width="50%"/>
-- switch insert:<img src="img/plexo_switch\_insert.png" alt="switch" width="50%"/>
+- switch insert:<img src="img/plexo_switch_insert.png" alt="switch" width="50%"/>
