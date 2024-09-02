@@ -17,7 +17,8 @@ You will also need my [nohscadlib](https://github.com/nohkumado/nohscadlib.git) 
 
 and here's what my actual doorbell looks like:
 
-- model ![model](img/hinge\_switch.png){ width= 50% height= 50%}
+- model <img src="img/hinge_switch.png" alt="model" width="50%"/>
+- ![model](img/hinge\_switch.png){ width= 50% height= 50%}
 - printed ![Doorbell photo](img/proto1\_klingelknopf.jpg = 60%)
 
 its a prototype, i printed it with a cleareance of .4mm, which was too much... 
