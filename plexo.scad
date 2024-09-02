@@ -5,7 +5,7 @@ tdeck =6.8;//thickness of the cover
 htop = 3.5; //thickenss of the deco layer on top (min 3, otherwise the underlying structure shows through
 gap = .4; //tolerance to leave between elements for better fitting
 
-show = "insert"; //["platine", "cover", "switch_insert"]
+show = "insert"; //["platine", "cover", "insert", "switch_insert"]
                         //platine is just the hole mask to fix insert and switch
                         //cover is the border of the plexo box, where you insert the insert in the
                         //insert is just a plain insert, in case of an empty box for example 
