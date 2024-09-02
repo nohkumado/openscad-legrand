@@ -1,1 +1,1 @@
-Don't be shy, push upstream your changes!
+Don't be shy, share your changes!
